@@ -1,0 +1,12 @@
+/* css reset */
+*{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+}
+
+#gameBoard{
+    border: 2px solid black;
+    margin: 20px;
+}
