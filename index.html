@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snake Game</title>
     <!-- adding the css file -->
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-    <!-- using the canvas for snake playground -->
-    <canvas id="gameBoard"></canvas>
-</body>
-<!-- adding the js file -->
-<script src="./script.js"></script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- wrapper for canvas and game details -->
+    <div class="wrapper">
+      <!-- wrapping score and level -->
+      <div class="gameDetails">
+        <h2>Current Score : <span id="currentScore"></span></h2>
+        <h2>Current Level : <span id="currentLevel"></span>00</h2>
+      </div>
+
+      <!-- using the canvas for snake playground -->
+      <canvas id="gameBoard"></canvas>
+    </div>
+  </body>
+  <!-- adding the js file -->
+  <script src="./script.js"></script>
 </html>

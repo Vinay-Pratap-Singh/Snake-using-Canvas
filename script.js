@@ -33,6 +33,14 @@ const direction = {
   y: 0,
 };
 
+// getting the current score element
+const currentScore = document.getElementById("currentScore");
+let score = 0;
+
+// getting the current level element
+const currentLevel = document.getElementById("currentLevel");
+let level = 0;
+
 // storing the windows animation frame id to stop the game
 let runGameLoop = true;
 
@@ -119,6 +127,14 @@ const updateGameBoard = () => {
   // rendering the snake food on the board
   context.fillStyle = "green";
   context.fillRect(snakeFood.x, snakeFood.y, 20, 20);
+
+  // updating the game score on board
+  if (score < 10) {
+    currentScore.innerText = "0" + score;
+  }
+  else {
+    currentScore.innerText = score;
+  }
 };
 
 // rendering the food on the canvas board
@@ -167,6 +183,9 @@ const checkEatenFood = () => {
 
     // move the food to new location
     generateRandomFood();
+
+    // updating the score of the user
+    score++;
   }
 };
 
