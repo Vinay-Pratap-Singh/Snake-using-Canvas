@@ -34,12 +34,39 @@ const direction = {
 };
 
 // getting the current score element
-const currentScore = document.getElementById("currentScore");
-let score = 0;
+const score = document.getElementById("currentScore");
+let currentScore = 0;
 
 // getting the current level element
-const currentLevel = document.getElementById("currentLevel");
-let level = 0;
+const level = document.getElementById("currentLevel");
+let currentLevel = 1;
+
+// creating the array for storing the criteria to complete the level and the number of wall blocks per level
+const levelData = [
+  {
+    block: 0,
+    score:3
+  },
+  {
+    block: 5,
+    score:3
+  },
+  {
+    block: 10,
+    score:3
+  },
+  {
+    block: 15,
+    score:3
+  },
+  {
+    block: 20,
+    score:3
+  },
+];
+
+// storing the random location of blocks for rendering on the board
+let totalWallBlock = [];
 
 // storing the windows animation frame id to stop the game
 let runGameLoop = true;
@@ -109,6 +136,14 @@ const updateGameVariables = () => {
   // check that the food is eaten by snake or not
   checkEatenFood();
 
+  // generate random blocks
+  for (let i = 0; i < levelData[currentLevel - 1].block; i++){
+    generateRandomBlock();
+  }
+
+  // checking that the user has won the level or not
+  wonGame();
+
   // checking that the game had end or not
   gameEnd();
 };
@@ -120,7 +155,7 @@ const updateGameBoard = () => {
 
   // rendering the snake over the board
   snakeBody.map((element) => {
-    context.fillStyle = "red";
+    context.fillStyle = "blue";
     context.fillRect(element.x, element.y, 20, 20);
   });
 
@@ -128,12 +163,28 @@ const updateGameBoard = () => {
   context.fillStyle = "green";
   context.fillRect(snakeFood.x, snakeFood.y, 20, 20);
 
+  // rendering the wall block on the board
+  // totalWallBlock.map((element) => {
+  //   context.fillStyle = "red";
+  //   context.fillRect(element.x, element.y, 20, 20);
+  // })
+  
+
+  // clearing the wall block array for new random locations
+  totalWallBlock = [];
+
   // updating the game score on board
-  if (score < 10) {
-    currentScore.innerText = "0" + score;
+  if (currentScore < 10) {
+    score.innerText = "0" + currentScore;
+  } else {
+    score.innerText = currentScore;
   }
-  else {
-    currentScore.innerText = score;
+
+  // updating the game level on board
+  if (currentLevel < 10) {
+    level.innerText = "0" + currentLevel;
+  } else {
+    level.innerText = currentLevel;
   }
 };
 
@@ -185,7 +236,7 @@ const checkEatenFood = () => {
     generateRandomFood();
 
     // updating the score of the user
-    score++;
+    currentScore++;
   }
 };
 
@@ -200,13 +251,94 @@ const gameEnd = () => {
   ) {
     alert("Game End");
     window.cancelAnimationFrame(runGameLoop);
+  }
+
+  // checking that the snake had hit his own body or not
+  for (let i = 1; i < snakeBody.length - 1; i++) {
+    if (
+      snakeBody[i].x === snakeBody[0].x &&
+      snakeBody[i].y === snakeBody[0].y
+    ) {
+      alert("Game End");
+      window.cancelAnimationFrame(runGameLoop);
     }
-    
-    // checking that the snake had hit his own body or not
-    for (let i = 1; i < snakeBody.length-1; i++){
-        if (snakeBody[i].x === snakeBody[0].x && snakeBody[i].y === snakeBody[0].y) {
-            alert("Game End");
-            window.cancelAnimationFrame(runGameLoop);
-        }
+  }
+
+  // checking that the snake had hit the wall blocks of canvas
+  for (let i = 0; i < totalWallBlock; i++){
+    if (snakeBody[0].x === totalWallBlock[i].x && snakeBody[0].y === totalWallBlock[i].y) {
+      alert("Game End");
+      window.cancelAnimationFrame(runGameLoop);
     }
+  }
 };
+
+// function to generate the random blocks for snake dificulty
+const generateRandomBlock = () => {
+  // generating the random values for block position
+  const x = Math.floor(Math.random() * width - 20);
+  const y = Math.floor(Math.random() * height - 20);
+
+  // checking the position of block is on snake body, snake food or not a multiple of 20
+  checkBlockPosition(x, y);
+  
+  // if the block is on a proper position, store it in the array
+  totalWallBlock.push({x,y})
+}
+
+// function for checking the location of random blocks
+const checkBlockPosition = (x,y) => {
+  // checking that the block is on a location which is multiple of 20
+  if (x % 20 !== 0 || y % 20 !== 0) {
+    generateRandomBlock();
+  }
+
+  // checking that the block is on the snake food or not
+  if (snakeFood.x === x && snakeFood.y === y) {
+    generateRandomBlock()
+  }
+
+  // checcking that the block matched from its array elements or not
+  for (let i = 0; i < totalWallBlock; i++){
+    if (totalWallBlock[i].x === x && totalWallBlock[i].y === y) {
+      // again generate the location
+      generateRandomBlock();
+    }
+  }
+
+  // checking that the food is on the body or not
+  for (let i = 1; i < snakeBody.length; i++) {
+    if (snakeBody[i].x === x && snakeBody[i].y === y) {
+      // again generate block if it was on snake body
+      generateRandomBlock();
+    }
+  }
+}
+
+// function to check that user has won the game or not
+const wonGame = () => {
+  if (levelData[currentLevel - 1].score === currentScore) {
+    // stopping the game loop
+    window.cancelAnimationFrame(runGameLoop);
+
+    alert("Won this level");
+    
+    // increasing the game level
+    currentLevel++;
+    
+    // reseting the current score
+    currentScore = 0;
+    
+    // reseting the snake body
+    snakeBody = [
+      {
+        x: 0,
+        y: 0,
+      },
+    ];
+
+    // again starting the game loop after 3 seconds
+      // window.requestAnimationFrame(gameLoop);
+    gameLoop();
+  }
+}
