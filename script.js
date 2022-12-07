@@ -197,8 +197,8 @@ const updateGameBoard = () => {
 
 // rendering the food on the canvas board
 const generateRandomFood = () => {
-  const x = Math.floor(Math.random() * width - 20);
-  const y = Math.floor(Math.random() * height - 20);
+  const x = Math.floor(Math.random() * width - 21);
+  const y = Math.floor(Math.random() * height - 21);
   snakeFood.x = x;
   snakeFood.y = y;
 
@@ -211,7 +211,13 @@ const checkFoodLocation = () => {
   // checking that the food is on a location which is multiple of 20
   if (snakeFood.x % 20 !== 0 || snakeFood.y % 20 !== 0) {
     generateRandomFood();
-    return
+    return;
+  }
+
+  // checking that the location is negative or not
+  if (snakeFood.x < 0 || snakeFood.y < 0) {
+    generateRandomFood();
+    return;
   }
 
   // checking that the food is on the body or not
@@ -219,7 +225,7 @@ const checkFoodLocation = () => {
     if (snakeBody[i].x === snakeFood.x && snakeBody[i].y === snakeFood.y) {
       // again generate food if it was on snake body
       generateRandomFood();
-      return
+      return;
     }
   }
 };
@@ -240,7 +246,7 @@ const checkEatenFood = () => {
   if (snakeBody[0].x === snakeFood.x && snakeBody[0].y === snakeFood.y) {
     // increasing the snake body
     snakeBody.push({ x: snakeFood.x, y: snakeFood.y });
-    
+
     // move the food to new location
     generateRandomFood();
 
@@ -295,8 +301,8 @@ const gameEnd = () => {
 // function to generate the random blocks for snake dificulty
 const generateRandomBlock = () => {
   // generating the random values for block position
-  const x = Math.floor(Math.random() * width - 20);
-  const y = Math.floor(Math.random() * height - 20);
+  const x = Math.floor(Math.random() * width - 21);
+  const y = Math.floor(Math.random() * height - 21);
 
   // checking the position of block is on snake body, snake food or not a multiple of 20
   checkBlockPosition(x, y);
@@ -312,6 +318,12 @@ const checkBlockPosition = (x, y) => {
 
   // checking that the block is on the snake food or not
   if (snakeFood.x === x && snakeFood.y === y) {
+    generateRandomBlock();
+    return;
+  }
+
+  // checking that the block is on negative location or not
+  if (x < 0 || y < 0) {
     generateRandomBlock();
     return;
   }
@@ -367,7 +379,7 @@ const wonGame = () => {
 
     // checking that the user had completed all the levels or not
     if (currentLevel > 10) {
-      alert("You had sucessfully completed all the game levels")
+      alert("You had sucessfully completed all the game levels");
       currentLevel = 1;
     }
 
