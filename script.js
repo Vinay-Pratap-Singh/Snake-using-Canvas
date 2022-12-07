@@ -45,24 +45,25 @@ let currentLevel = 1;
 const levelData = [
   {
     block: 0,
-    score: 3,
+    score: 100,
   },
   {
     block: 5,
-    score: 3,
+    score: 100,
   },
   {
     block: 10,
-    score: 3,
+    score: 100,
   },
   {
     block: 15,
-    score: 3,
+    score: 90,
   },
   {
     block: 20,
-    score: 3,
+    score: 90,
   },
+  {block:25,score:90},{block:30,score:80},{block:35,score:80},{block:40,score:80},{block:45,score:70}
 ];
 
 // storing the random location of blocks for rendering on the board
@@ -213,7 +214,7 @@ const updateGameBoard = () => {
 
   // rendering the bonus food if wait time over
   if (bonusFoodTime > 30) {
-    context.fillStyle = "cyan";
+    context.fillStyle = "yellow";
     context.fillRect(bonusFood.x, bonusFood.y, 20, 20);
     if (bonusFoodTime > 60) {
       generateBonusFood();
@@ -286,18 +287,25 @@ const checkEatenFood = () => {
 
     // updating the score of the user
     currentScore++;
+
+    return;
   }
 
   // checking that the snake has eaten the bonus food or not
   if (snakeBody[0].x === bonusFood.x && snakeBody[0].y === bonusFood.y) {
     // increasing the snake body
-    snakeBody.push({ x: snakeFood.x, y: snakeFood.y });
+    snakeBody.push({ x: bonusFood.x, y: bonusFood.y });
+
+    // restarting the time
+    bonusFoodTime = 0;
 
     // generating the random bonus food
     generateBonusFood();
 
     // updating the score by 5
     currentScore += 5;
+
+    return;
   }
 };
 
