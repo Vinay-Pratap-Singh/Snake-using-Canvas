@@ -68,6 +68,9 @@ const levelData = [
 // storing the random location of blocks for rendering on the board
 let totalWallBlock = [];
 
+// load the blocks once the game starts
+let loadBlock = true;
+
 // storing the windows animation frame id to stop the game
 let runGameLoop = true;
 
@@ -138,6 +141,19 @@ const updateGameVariables = () => {
 
   // checking that the user has won the level or not
   wonGame();
+
+  // loading the blocks for the first time when the game starts
+  if (loadBlock) {
+    totalWallBlock = [];
+
+    // generate random blocks for snake
+    for (let i = 0; i < levelData[currentLevel - 1].block; i++) {
+      generateRandomBlock();
+    }
+
+    // making the load block false to prevent continuous render
+    loadBlock = false;
+  }
 
   // checking that the game had end or not
   gameEnd();
@@ -354,6 +370,9 @@ const wonGame = () => {
       alert("You had sucessfully completed all the game levels")
       currentLevel = 1;
     }
+
+    // making the load block true for the first time rendering of the blocks when game starts
+    loadBlock = true;
 
     // starting the new level of game
     gameLoop();
