@@ -39,7 +39,7 @@ let currentScore = 0;
 
 // getting the current level element
 const level = document.getElementById("currentLevel");
-let currentLevel = 10;
+let currentLevel = localStorage.getItem("currentLevel") || 1;
 
 // getting the required score element
 const requiredScore = document.getElementById("requiredScore");
@@ -259,10 +259,10 @@ const updateGameBoard = () => {
   requiredScore.innerText = levelData[currentLevel - 1].score;
 
   // rendering the bonus food if wait time over
-  if (bonusFoodTime > levelData[currentLevel-1].bonusFoodInTime) {
+  if (bonusFoodTime > levelData[currentLevel - 1].bonusFoodInTime) {
     context.fillStyle = "yellow";
     context.fillRect(bonusFood.x, bonusFood.y, 20, 20);
-    if (bonusFoodTime > levelData[currentLevel-1].bonusFoodOutTime) {
+    if (bonusFoodTime > levelData[currentLevel - 1].bonusFoodOutTime) {
       generateBonusFood();
       bonusFoodTime = 0;
     }
@@ -545,6 +545,7 @@ const wonGame = () => {
 
     // increasing the game level
     currentLevel++;
+    localStorage.setItem("currentLevel", currentLevel);
 
     // reseting the current score
     currentScore = 0;
@@ -569,6 +570,7 @@ const wonGame = () => {
     if (currentLevel > 10) {
       alert("You had sucessfully completed all the game levels");
       currentLevel = 1;
+      localStorage.setItem("currentLevel", currentLevel);
     }
 
     // making the load block true for the first time rendering of the blocks when game starts
