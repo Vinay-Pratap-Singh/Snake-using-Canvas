@@ -39,7 +39,7 @@ let currentScore = 0;
 
 // getting the current level element
 const level = document.getElementById("currentLevel");
-let currentLevel = 1;
+let currentLevel = 10;
 
 // getting the required score element
 const requiredScore = document.getElementById("requiredScore");
@@ -49,25 +49,63 @@ const levelData = [
   {
     block: 0,
     score: 100,
+    bonusFoodInTime: 100,
+    bonusFoodOutTime: 150,
   },
   {
     block: 5,
     score: 100,
+    bonusFoodInTime: 100,
+    bonusFoodOutTime: 150,
   },
   {
     block: 10,
     score: 100,
+    bonusFoodInTime: 100,
+    bonusFoodOutTime: 150,
   },
   {
     block: 15,
     score: 90,
+    bonusFoodInTime: 80,
+    bonusFoodOutTime: 130,
   },
-  { block: 20, score: 90 },
-  { block: 25, score: 90 },
-  { block: 30, score: 80 },
-  { block: 35, score: 80 },
-  { block: 40, score: 80 },
-  { block: 45, score: 70 },
+  {
+    block: 20,
+    score: 90,
+    bonusFoodInTime: 70,
+    bonusFoodOutTime: 120,
+  },
+  {
+    block: 25,
+    score: 90,
+    bonusFoodInTime: 60,
+    bonusFoodOutTime: 110,
+  },
+  {
+    block: 30,
+    score: 80,
+    bonusFoodInTime: 50,
+    bonusFoodOutTime: 100,
+  },
+  {
+    block: 40,
+    score: 70,
+    bonusFoodInTime: 50,
+    bonusFoodOutTime: 100,
+  },
+  {
+    block: 50,
+    score: 60,
+    bonusFoodInTime: 40,
+    bonusFoodOutTime: 100,
+  },
+  {
+    block: 60,
+    score: 50,
+    bonusFoodInTime: 30,
+    bonusFoodOutTime: 100,
+  },
 ];
 
 // storing the random location of blocks for rendering on the board
@@ -85,8 +123,17 @@ const bonusFood = {
 // storing the windows animation frame id to stop the game
 let runGameLoop = true;
 
-// adding the global event listner for getting the snake direction from the user using arrow keys
-window.addEventListener("keyup", (event) => {
+// time for bonus food on game board
+let bonusFoodTime = 0;
+
+// checking the time of game start
+let startTime = new Date().getTime();
+
+// for handling the speed of snake
+const frameSpeed = 5;
+
+// function to handle the direction change of the snake
+const getSnakeDirection = (event) => {
   switch (event.key) {
     case "ArrowUp":
       if (direction.y !== 20) {
@@ -113,19 +160,13 @@ window.addEventListener("keyup", (event) => {
       }
       break;
   }
-});
-
-// time for bonus food on game board
-let bonusFoodTime = 0;
-
-// checking the time of game start
-let startTime = new Date().getTime();
-
-// for handling the speed of snake
-const frameSpeed = 5;
+};
 
 // creating the game loop for running the game
 const gameLoop = () => {
+  // adding the global event listner for getting the snake direction from the user using arrow keys
+  window.addEventListener("keyup", getSnakeDirection);
+
   runGameLoop = window.requestAnimationFrame(() => {
     const currentTime = new Date().getTime();
     const difference = currentTime - startTime;
@@ -218,10 +259,10 @@ const updateGameBoard = () => {
   requiredScore.innerText = levelData[currentLevel - 1].score;
 
   // rendering the bonus food if wait time over
-  if (bonusFoodTime > 100) {
+  if (bonusFoodTime > levelData[currentLevel-1].bonusFoodInTime) {
     context.fillStyle = "yellow";
     context.fillRect(bonusFood.x, bonusFood.y, 20, 20);
-    if (bonusFoodTime > 130) {
+    if (bonusFoodTime > levelData[currentLevel-1].bonusFoodOutTime) {
       generateBonusFood();
       bonusFoodTime = 0;
     }
@@ -325,7 +366,15 @@ const gameEnd = () => {
   ) {
     alert("Game End");
 
+    // clearing the whole canvas
+    context.clearRect(0, 0, width, height);
+
+    // stopping the game loop
     window.cancelAnimationFrame(runGameLoop);
+
+    // stoping the event listener
+    window.removeEventListener("keyup", getSnakeDirection);
+
     // reseting the current score
     currentScore = 0;
 
@@ -347,6 +396,9 @@ const gameEnd = () => {
 
     // making the load block true for the first time rendering of the blocks when game starts
     loadBlock = true;
+
+    // empty the blocks
+    totalWallBlock = [];
 
     myBtn.innerText = "Start Game";
   }
@@ -381,7 +433,7 @@ const gameEnd = () => {
 
       // making the load block true for the first time rendering of the blocks when game starts
       loadBlock = true;
-      
+
       myBtn.innerText = "Start Game";
     }
   }
@@ -393,7 +445,7 @@ const gameEnd = () => {
       snakeBody[0].y === totalWallBlock[i].y
     ) {
       alert("Game End");
-      
+
       window.cancelAnimationFrame(runGameLoop);
       // reseting the current score
       currentScore = 0;
@@ -416,7 +468,7 @@ const gameEnd = () => {
 
       // making the load block true for the first time rendering of the blocks when game starts
       loadBlock = true;
-      
+
       myBtn.innerText = "Start Game";
     }
   }
@@ -486,6 +538,9 @@ const wonGame = () => {
     // stopping the game loop
     window.cancelAnimationFrame(runGameLoop);
 
+    // stoping the event listener
+    window.removeEventListener("keyup", getSnakeDirection);
+
     alert("Won this level");
 
     // increasing the game level
@@ -519,8 +574,8 @@ const wonGame = () => {
     // making the load block true for the first time rendering of the blocks when game starts
     loadBlock = true;
 
-    // starting the new level of game
-    gameLoop();
+    // changing the game button text to start again
+    myBtn.innerText = "Start Game";
   }
 };
 
@@ -574,8 +629,14 @@ const handleButton = (event) => {
       gameLoop();
       break;
     case "Pause Game":
-      event.target.innerText = "Start Game";
+      event.target.innerText = "Resume Game";
       window.cancelAnimationFrame(runGameLoop);
+      // stoping the event listener
+      window.removeEventListener("keyup", getSnakeDirection);
+      break;
+    case "Resume Game":
+      event.target.innerText = "Pause Game";
+      gameLoop();
       break;
   }
 };
