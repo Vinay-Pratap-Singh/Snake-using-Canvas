@@ -218,10 +218,10 @@ const updateGameBoard = () => {
   requiredScore.innerText = levelData[currentLevel - 1].score;
 
   // rendering the bonus food if wait time over
-  if (bonusFoodTime > 30) {
+  if (bonusFoodTime > 100) {
     context.fillStyle = "yellow";
     context.fillRect(bonusFood.x, bonusFood.y, 20, 20);
-    if (bonusFoodTime > 60) {
+    if (bonusFoodTime > 130) {
       generateBonusFood();
       bonusFoodTime = 0;
     }
@@ -324,7 +324,31 @@ const gameEnd = () => {
     snakeBody[0].y > height
   ) {
     alert("Game End");
+
     window.cancelAnimationFrame(runGameLoop);
+    // reseting the current score
+    currentScore = 0;
+
+    // reseting the snake body
+    snakeBody = [
+      {
+        x: 0,
+        y: 0,
+      },
+    ];
+
+    direction = {
+      x: 0,
+      y: 0,
+    };
+
+    // reseting the bonus food time
+    bonusFoodTime = 0;
+
+    // making the load block true for the first time rendering of the blocks when game starts
+    loadBlock = true;
+
+    myBtn.innerText = "Start Game";
   }
 
   // checking that the snake had hit his own body or not
@@ -334,7 +358,31 @@ const gameEnd = () => {
       snakeBody[i].y === snakeBody[0].y
     ) {
       alert("Game End");
+
       window.cancelAnimationFrame(runGameLoop);
+      // reseting the current score
+      currentScore = 0;
+
+      // reseting the snake body
+      snakeBody = [
+        {
+          x: 0,
+          y: 0,
+        },
+      ];
+
+      direction = {
+        x: 0,
+        y: 0,
+      };
+
+      // reseting the bonus food time
+      bonusFoodTime = 0;
+
+      // making the load block true for the first time rendering of the blocks when game starts
+      loadBlock = true;
+      
+      myBtn.innerText = "Start Game";
     }
   }
 
@@ -345,7 +393,31 @@ const gameEnd = () => {
       snakeBody[0].y === totalWallBlock[i].y
     ) {
       alert("Game End");
+      
       window.cancelAnimationFrame(runGameLoop);
+      // reseting the current score
+      currentScore = 0;
+
+      // reseting the snake body
+      snakeBody = [
+        {
+          x: 0,
+          y: 0,
+        },
+      ];
+
+      direction = {
+        x: 0,
+        y: 0,
+      };
+
+      // reseting the bonus food time
+      bonusFoodTime = 0;
+
+      // making the load block true for the first time rendering of the blocks when game starts
+      loadBlock = true;
+      
+      myBtn.innerText = "Start Game";
     }
   }
 };
@@ -501,12 +573,12 @@ const handleButton = (event) => {
       event.target.innerText = "Pause Game";
       gameLoop();
       break;
-      case "Pause Game":
+    case "Pause Game":
       event.target.innerText = "Start Game";
       window.cancelAnimationFrame(runGameLoop);
       break;
   }
-}
+};
 
 // getting the button for game start, pause and restart
 const myBtn = document.getElementById("gameButton");
