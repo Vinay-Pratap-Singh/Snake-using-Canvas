@@ -41,6 +41,9 @@ let currentScore = 0;
 const level = document.getElementById("currentLevel");
 let currentLevel = 1;
 
+// getting the required score element
+const requiredScore = document.getElementById("requiredScore");
+
 // creating the array for storing the criteria to complete the level and the number of wall blocks per level
 const levelData = [
   {
@@ -59,11 +62,12 @@ const levelData = [
     block: 15,
     score: 90,
   },
-  {
-    block: 20,
-    score: 90,
-  },
-  {block:25,score:90},{block:30,score:80},{block:35,score:80},{block:40,score:80},{block:45,score:70}
+  { block: 20, score: 90 },
+  { block: 25, score: 90 },
+  { block: 30, score: 80 },
+  { block: 35, score: 80 },
+  { block: 40, score: 80 },
+  { block: 45, score: 70 },
 ];
 
 // storing the random location of blocks for rendering on the board
@@ -128,7 +132,7 @@ const gameLoop = () => {
     if (difference > 1000 / frameSpeed) {
       startTime = currentTime;
 
-      // updating the bonus food time 
+      // updating the bonus food time
       bonusFoodTime++;
 
       // updating the game variable
@@ -140,8 +144,6 @@ const gameLoop = () => {
   });
   runGameLoop = window.requestAnimationFrame(gameLoop);
 };
-// running the game loop function
-gameLoop();
 
 // function to update the variables of game
 const updateGameVariables = () => {
@@ -211,6 +213,9 @@ const updateGameBoard = () => {
   } else {
     level.innerText = currentLevel;
   }
+
+  // updating the required score for a level
+  requiredScore.innerText = levelData[currentLevel - 1].score;
 
   // rendering the bonus food if wait time over
   if (bonusFoodTime > 30) {
@@ -405,7 +410,7 @@ const checkBlockPosition = (x, y) => {
 
 // function to check that user has won the game or not
 const wonGame = () => {
-  if (currentScore>=levelData[currentLevel - 1].score ) {
+  if (currentScore >= levelData[currentLevel - 1].score) {
     // stopping the game loop
     window.cancelAnimationFrame(runGameLoop);
 
@@ -487,3 +492,22 @@ const checkBonusFoodLocation = () => {
     }
   }
 };
+
+// function for handling the game button function
+const handleButton = (event) => {
+  const text = event.target.innerText;
+  switch (text) {
+    case "Start Game":
+      event.target.innerText = "Pause Game";
+      gameLoop();
+      break;
+      case "Pause Game":
+      event.target.innerText = "Start Game";
+      window.cancelAnimationFrame(runGameLoop);
+      break;
+  }
+}
+
+// getting the button for game start, pause and restart
+const myBtn = document.getElementById("gameButton");
+myBtn.addEventListener("click", handleButton);

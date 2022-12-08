@@ -13,8 +13,19 @@
     <div class="wrapper">
       <!-- wrapping score and level -->
       <div class="gameDetails">
-        <h2>Current Score : <span id="currentScore"></span></h2>
-        <h2>Current Level : <span id="currentLevel"></span></h2>
+        <!-- for current and required score -->
+        <div>
+          <p>Current Score : <span id="currentScore"></span></p>
+          <p>Required Score : <span id="requiredScore"></span></p>
+        </div>
+
+        <!-- for current and total levels -->
+        <div>
+          <p>Current Level : <span id="currentLevel"></span></p>
+          <p>Total Level : <span id="totalLevel">10</span></p>
+        </div>
+
+        <button id="gameButton">Start Game</button>
       </div>
 
       <!-- using the canvas for snake playground -->
