@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- adding the google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <title>Snake Game</title>
     <!-- adding the css file -->
     <link rel="stylesheet" href="./style.css" />
@@ -12,7 +16,13 @@
     <!-- wrapper for canvas and game details -->
     <div class="wrapper">
       <!-- wrapping score and level -->
-      <div class="gameDetails">
+      <div id="gameDetails">
+        <!-- Symbol for opening the User Instruction -->
+        <p class="popUp">i</p>
+
+        <!-- heading name for game -->
+        <h2>Snake Game</h2>
+
         <!-- for current and required score -->
         <div>
           <p>Current Score : <span id="currentScore">00</span></p>
@@ -26,6 +36,27 @@
         </div>
 
         <button id="gameButton">Start Game</button>
+      </div>
+
+      <!-- pop up for displaying the instruction box -->
+      <div id="instructionBox">
+        <!-- button for closing the instruction pop up box -->
+        <p class="popUp">x</p>
+
+        <h2>Game Instruction</h2>
+        <ol>
+          <li>Hit <strong>"Start Game"</strong> button to launch the game. </li>
+          <li>The same button will be used for <strong>"Pause"</strong> and <strong>"Resume Game"</strong></li>
+          <li><strong>Blue Box</strong> is the <strong>Snake Body</strong></li>
+          <li><strong>Green Box</strong> is the <strong>Snake Food</strong></li>
+          <li><strong>Yellow Box</strong> is the <strong>Bonus Food</strong></li>
+          <li><strong>Red Box</strong> is the <strong>Wall Block</strong></li>
+          <li><strong>Snake Food</strong> gives <strong>1 Point</strong></li>
+          <li><strong>Bonus Food</strong> gives <strong>5 Point</strong></li>
+          <li>Avoid the <strong>"wall"</strong> and <strong>"wall blocks"</strong></li>
+          <li>Complete the required score to move to next level</li>
+          <li><strong>Best of Luck!!!</strong></li>
+        </ol>
       </div>
 
       <!-- using the canvas for snake playground -->

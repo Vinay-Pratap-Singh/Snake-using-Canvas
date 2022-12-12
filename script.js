@@ -646,3 +646,27 @@ const handleButton = (event) => {
 // getting the button for game start, pause and restart
 const myBtn = document.getElementById("gameButton");
 myBtn.addEventListener("click", handleButton);
+
+// handling the pop up box
+// getting the pop up button
+const popUpBtn = document.getElementsByClassName("popUp");
+
+// getting the details and instructions div
+const gameDetails = document.getElementById("gameDetails");
+const instructionBox = document.getElementById("instructionBox");
+
+// adding the event listner on pop up button and defining the function for its functionality
+Array.from(popUpBtn).forEach(element => {
+  element.addEventListener("click", (event) => {
+    if (event.target.innerText === "i") {    
+      gameDetails.style.display = "none";
+      instructionBox.style.display = "block";
+      canvas.style.display = "none";
+    }
+    else if (event.target.innerText === "x") {
+      gameDetails.style.display = "flex";
+      instructionBox.style.display = "none";
+      canvas.style.display = "block";
+    }
+  })
+});
