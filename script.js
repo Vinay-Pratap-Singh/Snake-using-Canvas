@@ -658,15 +658,38 @@ const instructionBox = document.getElementById("instructionBox");
 // adding the event listner on pop up button and defining the function for its functionality
 Array.from(popUpBtn).forEach(element => {
   element.addEventListener("click", (event) => {
-    if (event.target.innerText === "i") {    
-      gameDetails.style.display = "none";
-      instructionBox.style.display = "block";
-      canvas.style.display = "none";
+    if (event.target.innerText === "i") {  
+      // removing the existing fadein animation
+      gameDetails.classList.remove("fadeIn");
+      canvas.classList.remove("fadeIn")
+
+      // adding the new fade out animation
+      gameDetails.classList.add("fadeOut");
+      canvas.classList.add("fadeOut");
+
+      setTimeout(() => {
+        instructionBox.classList.add("fadeIn");
+        instructionBox.style.display = "block";
+        gameDetails.style.display = "none";
+        canvas.style.display = "none";
+      },980)
     }
     else if (event.target.innerText === "x") {
-      gameDetails.style.display = "flex";
-      instructionBox.style.display = "none";
-      canvas.style.display = "block";
+      instructionBox.classList.remove("fadeIn");
+      instructionBox.classList.add("fadeOut");
+
+      setTimeout(() => {
+        // removing the fade out animation
+        gameDetails.classList.remove("fadeOut")
+        canvas.classList.remove("fadeOut")
+
+        // adding the fade in animation
+        gameDetails.classList.add("fadeIn")
+        canvas.classList.add("fadeIn")
+        gameDetails.style.display = "flex";
+        canvas.style.display = "block";
+        instructionBox.style.display = "none";
+      },980)
     }
   })
 });

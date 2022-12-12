@@ -87,6 +87,7 @@ body{
     position: relative;
     width: fit-content;
     padding: 20px;
+    transition: ease-in-out 400ms;
     /* by dafault instructions will be hidden */
     display: none;
 }
@@ -117,3 +118,24 @@ body{
     background: rgb(155, 155, 155);
     color: black;   
 }
+
+/* for handling the pop up animation */
+.fadeOut{
+    animation: fadeOut 1s;
+}
+
+.fadeIn{
+    animation: fadeIn 1s;
+}
+
+/* animation for fade out */
+@keyframes fadeOut {
+    0% {opacity: 1;}
+    100% {opacity: 0;} 
+ } 
+
+ /* aniamtion for fade in */
+ @keyframes fadeIn{
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+ }
